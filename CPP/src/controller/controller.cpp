@@ -4,6 +4,4 @@
 using namespace std;
 
 int main(){
-    cout << "SDN" << endl;
-    return 0;
 }
