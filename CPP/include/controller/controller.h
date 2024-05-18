@@ -10,6 +10,10 @@ class Controller{
             cout << " Control message sent:" << message << endl;
         }
 
+        void handleNetworkEvent(string event){
+            cout << "Handling network event:" << event << endl;
+        }
+
 };
 
 // int main()
