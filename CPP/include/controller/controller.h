@@ -24,14 +24,20 @@ class Controller{
             cout << "Switch added to the conroller" << endl;
         }
         // Remove switch from the controller
-        void removeSwitch(const Switch& swt){
-            auto item = find(switches.begin(), switches.end(),swt);
-            if(item != switches.end()){
-                switches.erase(item);
-                cout << "Switch removed from the controller" << endl;
+        void removeSwitch(Switch& swt){
+            bool found = false;
+            for(auto it = switches.begin(); it != switches.end();it++){
+                if((*it).getId()==swt.getId()){
+                    switches.erase(it);
+                    found = true;
+                }
+
+            }
+            if(found){
+                cout << "found" <<endl;
             }
             else{
-                cout << "Switch not found" << endl;
+                cout << "not found" << endl;
             }
         }
 };
