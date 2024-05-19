@@ -1,4 +1,3 @@
-### Learning Goal
 - [x] Class structuring  and instance creation 
 - [x] implementation of constructor
 - [x] usage and definition of class functions 
