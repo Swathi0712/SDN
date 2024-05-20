@@ -26,5 +26,17 @@ int main(){
     // Show traffic logs
     switch1.showTrafficLogs();
     switch2.showTrafficLogs();
+
+    // Simulate network events
+    vector <RoutingTableEntry> update1 = {
+        {"destination_A", "switch2", 2},   // Update from switch1 to switch2
+        {"destination_B", "switch2", 3}
+    };
+
+    vector <RoutingTableEntry> update2 = {
+        {"destination_C", "switch1", 2},   // Update from switch1 to switch2
+        {"destination_d", "switch1", 3}
+    };
+
     return 0;
 }
