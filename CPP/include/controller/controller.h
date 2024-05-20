@@ -20,9 +20,13 @@ class Controller{
         vector <RoutingTableEntry> routingTable;
     
     public:
-        // method to send control message to switches
+        // method to send control message to all switches
         void sendControlMessage(string message){
-            cout << " Control message sent:" << message << endl;
+            // cout << " Control message sent:" << message << endl;
+            for(auto& st:switches){
+                st.receiveControlMessage(message);
+            }
+            cout << " Control message sent to all switches" << endl;
         }
 
         void handleNetworkEvent(string event){
