@@ -70,5 +70,15 @@ class Controller{
                 }
             }
         }
-        
+
+        // Method to perform routing based on destination IP Address
+        string route(string destination){
+            for(const auto& entry: routingTable){
+                if(destination==entry.destination){
+                    return entry.nextHop;
+                }
+            }
+            // If destination not found in routing table return "drop packet" 
+            return "DROP PACKET";
+        }
 };

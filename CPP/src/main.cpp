@@ -35,8 +35,19 @@ int main(){
 
     vector <RoutingTableEntry> update2 = {
         {"destination_C", "switch1", 2},   // Update from switch1 to switch2
-        {"destination_d", "switch1", 3}
+        {"destination_B", "switch1", 2}
     };
+
+    // Test to update routing table in the controller
+    control.updateRoutingTable(update1);
+
+    // Simulate routing based on destination IP address
+    string nxtHop = control.route("destination_B");
+    cout << "Next hop for destination B: " << nxtHop <<endl;
+
+    control.updateRoutingTable(update2);
+    string nxt = control.route("destination_B");
+    cout << "Next hop for destination B: " << nxt <<endl;
 
     return 0;
 }
