@@ -29,8 +29,18 @@ class Controller{
             cout << " Control message sent to all switches" << endl;
         }
 
+        // Method to handle network events
         void handleNetworkEvent(string event){
-            cout << "Handling network event:" << event << endl;
+            cout << "Handled network event:" << event << endl;
+            // Perform actions based on network events
+            if(event == "Link Up"){
+                // Send a message to all switches to enable ports(Set status as Active)
+                sendControlMessage("EnablePorts");
+            }
+            else if(event == "Link Down" ){
+                // Send a message to all switches to disable ports(Set status as Inactive)
+                sendControlMessage("DisablePorts");
+            }
         }
 
         // Add a new switch to the controller

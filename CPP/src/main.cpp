@@ -49,5 +49,8 @@ int main(){
     string nxt = control.route("destination_B");
     cout << "Next hop for destination B: " << nxt <<endl;
 
+    // Testing handling of network events
+    control.handleNetworkEvent("Link Up");
+    control.handleNetworkEvent("Link Down");
     return 0;
 }

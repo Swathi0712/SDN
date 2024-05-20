@@ -18,12 +18,14 @@ class Switch {
         {
 
         }
+
         // Function to set the status of the switch
         void setStatus(bool newStatus)
         {
             status = newStatus;
             cout << "New status:" << (status ? "on" : "off") << endl;
         }
+
         // Function to get the status of the switch
         bool getStatus()
         {
@@ -33,17 +35,20 @@ class Switch {
         {
             return id;
         }
+
         // Function to display received control message
         void receiveControlMessage(const string message)
         {
-            cout << "switch" << id << "Received control message" << message << endl;
+            cout << "Switch: " << id << " Received control message: " << message << endl;
         }
+
         void logTraffic(string traffic)
         {
             // Push to traffic logs
             trafficLogs.push_back(traffic);
             cout << "Switch: " << id << " Traffic logged: " << traffic << endl;
         }
+
         void showTrafficLogs()
         {
             // To print out the traffic logs from the log table
