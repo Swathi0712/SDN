@@ -18,6 +18,9 @@ class Controller{
         vector <Switch> switches;
         // Routing table maintained by the controller
         vector <RoutingTableEntry> routingTable;
+
+        // Representing infinite cost
+        const int INF = 1e9;
     
     public:
         // method to send control message to all switches
@@ -85,6 +88,7 @@ class Controller{
             }
         }
 
+
         // Method to perform routing based on destination IP Address
         string route(string destination){
             for(const auto& entry: routingTable){
@@ -94,5 +98,31 @@ class Controller{
             }
             // If destination not found in routing table return "drop packet" 
             return "DROP PACKET";
+        }
+
+        // Method to handle link failures
+        void handleLinkFailure(string& failedLink){
+            for(auto& entry: routingTable){
+                if(entry.nextHop==failedLink){
+                    entry.cost=INF;
+                }
+            }
+            sendTriggeredUpdate();
+        }
+
+        // Method to send triggered updates to switches
+        void sendTriggeredUpdate(){
+            for(auto& swt:switches){
+                swt.receiveControlMessage( createUpdateMessage());
+            }
+        }
+
+        // Method to create update message
+        string createUpdateMessage(){
+            string message = "Update: ";
+            for(auto& entry:routingTable){
+                message += " " + entry.destination + " ," + entry.nextHop + " ," + to_string(entry.cost) + "\n";
+            }
+            return message;
         }
 };
