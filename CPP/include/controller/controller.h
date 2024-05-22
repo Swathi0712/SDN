@@ -34,6 +34,11 @@ class Controller{
             running = true;
         }
 
+        // Destructor to stop periodic updates
+        ~Controller(){
+            stopPeriodicUpdates();
+        }
+
         // method to send control message to all switches
         void sendControlMessage(string message){
             // cout << " Control message sent:" << message << endl;
@@ -161,4 +166,6 @@ class Controller{
         void stopPeriodicUpdates(){
             running =  false;
         }
+
+        
 };
