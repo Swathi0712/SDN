@@ -52,5 +52,14 @@ int main(){
     // Testing handling of network events
     control.handleNetworkEvent("Link Up");
     control.handleNetworkEvent("Link Down");
+
+    // Handling Link failure
+    control.handleLinkFailure("switch1"); 
+
+    // Start periodic updates with an interval of 5 seconds
+    control.startPeriodicUpdate();
+    // Keep the program running to observe periodic updates
+    this_thread::sleep_for(30000ms);
+    
     return 0;
 }

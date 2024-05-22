@@ -2,9 +2,13 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <thread>
+#include <chrono>
+#include <atomic>
 #include "../switch/switch.h"
 
 using namespace std;
+using namespace std::this_thread;
 
 struct RoutingTableEntry{
     string destination;
@@ -21,8 +25,15 @@ class Controller{
 
         // Representing infinite cost
         const int INF = 1e9;
+
+        atomic <bool> running;
     
     public:
+        // Constructor initialising the atomic flag
+        Controller(){
+            running = true;
+        }
+
         // method to send control message to all switches
         void sendControlMessage(string message){
             // cout << " Control message sent:" << message << endl;
@@ -74,8 +85,8 @@ class Controller{
         void updateRoutingTable(const vector<RoutingTableEntry> updates){
             for(const auto& entry: updates){
                 // Check if entry is already available on the routing table
-                auto it = find_if(routingTable.begin(), routingTable.end(), 
-                [&](const RoutingTableEntry& ety){return ety.destination == entry.destination;});
+                auto it = find_if(routingTable.begin(), routingTable.end(), [&](const RoutingTableEntry& ety)
+                {return ety.destination == entry.destination;});
                 
                 if(it!=routingTable.end()){
                     if(entry.cost < it->cost){
@@ -101,7 +112,7 @@ class Controller{
         }
 
         // Method to handle link failures
-        void handleLinkFailure(string& failedLink){
+        void handleLinkFailure(string failedLink){
             for(auto& entry: routingTable){
                 if(entry.nextHop==failedLink){
                     entry.cost=INF;
@@ -115,6 +126,7 @@ class Controller{
             for(auto& swt:switches){
                 swt.receiveControlMessage( createUpdateMessage());
             }
+            cout << "Triggered updates sent to all switches" << endl;
         }
 
         // Method to create update message
@@ -124,5 +136,29 @@ class Controller{
                 message += " " + entry.destination + " ," + entry.nextHop + " ," + to_string(entry.cost) + "\n";
             }
             return message;
+        }
+
+        // Method to send periodic updates to switches
+        void sendPeriodicUpdates(){
+            for(auto& swt:switches){
+                swt.receiveControlMessage( createUpdateMessage());
+            }
+            cout << "Periodic update..." << endl;
+        }
+        
+        // Method to start periodic updates
+        void startPeriodicUpdate(){
+            auto f = [&](){
+                while(running){
+                    sendPeriodicUpdates();
+                    sleep_for(5000ms);
+                }
+            };
+            thread(f).detach();
+        }
+
+        // Method to stop periodic updates
+        void stopPeriodicUpdates(){
+            running =  false;
         }
 };

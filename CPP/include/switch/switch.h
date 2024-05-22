@@ -39,7 +39,7 @@ class Switch {
         // Function to display received control message
         void receiveControlMessage(const string message)
         {
-            cout << "Switch: " << id << " Received control message: " << message << endl;
+            cout << "Switch: " << id << " Received control message:\n " << message << endl;
         }
 
         void logTraffic(string traffic)
