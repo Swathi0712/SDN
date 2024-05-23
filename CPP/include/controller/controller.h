@@ -5,6 +5,7 @@
 #include <thread>
 #include <chrono>
 #include <atomic>
+#include <unordered_map>
 #include "../switch/switch.h"
 
 using namespace std;
@@ -12,7 +13,7 @@ using namespace std::this_thread;
 
 struct RoutingTableEntry{
     string destination;
-    string nextHop;
+    vector <string> nextHop;
     int cost;
 };
 
@@ -20,6 +21,7 @@ class Controller{
     private:
         // Vector to store connected switches
         vector <Switch> switches;
+
         // Routing table maintained by the controller
         vector <RoutingTableEntry> routingTable;
 
@@ -27,6 +29,9 @@ class Controller{
         const int INF = 1e9;
 
         atomic <bool> running;
+
+        // Index for round robin load balancing
+        unordered_map <string, int> loadBalancerIndex;
     
     public:
         // Constructor initialising the atomic flag
@@ -97,19 +102,27 @@ class Controller{
                     if(entry.cost < it->cost){
                         *it = entry;
                     }
+                    else if(entry.cost == it->cost){
+                        it->nextHop.push_back(entry.nextHop[0]);
+                    }
                 }
+
                 else{
                     routingTable.push_back(entry);
                 }
             }
         }
 
-
         // Method to perform routing based on destination IP Address
         string route(string destination){
             for(const auto& entry: routingTable){
                 if(destination==entry.destination){
-                    return entry.nextHop;
+                    auto& hops = entry.nextHop;
+                    if(!hops.empty()){
+                        int index = loadBalancerIndex[destination]%hops.size();
+                        loadBalancerIndex[destination]++;
+                        return hops[index];
+                    }
                 }
             }
             // If destination not found in routing table return "drop packet" 
@@ -119,7 +132,11 @@ class Controller{
         // Method to handle link failures
         void handleLinkFailure(string failedLink){
             for(auto& entry: routingTable){
-                if(entry.nextHop==failedLink){
+                auto& hops = entry.nextHop;
+                // Removing the failed link (switch) from the list of available next hops(switches)
+                hops.erase(remove(hops.begin(), hops.end(), failedLink), hops.end());
+                //  If next hops for a particular destination is empty then make its cost infinity
+                if(hops.empty()){
                     entry.cost=INF;
                 }
             }
@@ -138,7 +155,9 @@ class Controller{
         string createUpdateMessage(){
             string message = "Update: ";
             for(auto& entry:routingTable){
-                message += " " + entry.destination + " ," + entry.nextHop + " ," + to_string(entry.cost) + "\n";
+                for(auto& hop: entry.nextHop){
+                    message += " " + entry.destination + " ," + hop + " ," + to_string(entry.cost) + "\n";
+                }
             }
             return message;
         }

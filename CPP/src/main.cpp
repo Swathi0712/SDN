@@ -29,13 +29,13 @@ int main(){
 
     // Simulate network events
     vector <RoutingTableEntry> update1 = {
-        {"destination_A", "switch2", 2},   // Update from switch1 to switch2
-        {"destination_B", "switch2", 3}
+        {"destination_A", {"switch2"}, 2},   // Update from switch1 to switch2
+        {"destination_B", {"switch2"}, 3}
     };
 
     vector <RoutingTableEntry> update2 = {
-        {"destination_C", "switch1", 2},   // Update from switch1 to switch2
-        {"destination_B", "switch1", 2}
+        {"destination_C", {"switch1"}, 2},   // Update from switch1 to switch2
+        {"destination_B", {"switch1"}, 2}
     };
 
     // Test to update routing table in the controller
