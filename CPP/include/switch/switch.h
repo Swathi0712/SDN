@@ -31,6 +31,7 @@ class Switch {
         {
             return status;
         }
+        
         string getId()
         {
             return id;

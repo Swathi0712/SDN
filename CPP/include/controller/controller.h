@@ -44,6 +44,29 @@ class Controller{
             stopPeriodicUpdates();
         }
 
+        // Add a new switch to the controller
+        void addSwitch(const Switch& swt){
+            switches.push_back(swt);
+            cout << "Switch added to the conroller" << endl;
+        }
+
+        // Remove switch from the controller
+        void removeSwitch(Switch& swt){
+            bool found = false;
+            for(auto it = switches.begin(); it != switches.end();it++){
+                if((*it).getId()==swt.getId()){
+                    switches.erase(it);
+                    found = true;
+                }
+            }
+            if(found){
+                cout << "found" <<endl;
+            }
+            else{
+                cout << "not found" << endl;
+            }
+        }
+
         // method to send control message to all switches
         void sendControlMessage(string message){
             // cout << " Control message sent:" << message << endl;
@@ -64,30 +87,6 @@ class Controller{
             else if(event == "Link Down" ){
                 // Send a message to all switches to disable ports(Set status as Inactive)
                 sendControlMessage("DisablePorts");
-            }
-        }
-
-        // Add a new switch to the controller
-        void addSwitch(const Switch& swt){
-            switches.push_back(swt);
-            cout << "Switch added to the conroller" << endl;
-        }
-
-        // Remove switch from the controller
-        void removeSwitch(Switch& swt){
-            bool found = false;
-            for(auto it = switches.begin(); it != switches.end();it++){
-                if((*it).getId()==swt.getId()){
-                    switches.erase(it);
-                    found = true;
-                }
-
-            }
-            if(found){
-                cout << "found" <<endl;
-            }
-            else{
-                cout << "not found" << endl;
             }
         }
 
@@ -184,7 +183,5 @@ class Controller{
         // Method to stop periodic updates
         void stopPeriodicUpdates(){
             running =  false;
-        }
-
-        
+        } 
 };

@@ -1,3 +1,7 @@
+# import sys
+# sys.path.append(r'D:\SDN\py\src\controller')
+# from controller import controller
+
 class Switch:
     # private members
     __id = None
@@ -6,11 +10,9 @@ class Switch:
 
     # public members
     # initialising switch Id and status
-    def __init__(self, switchId , switchStatus, TrafficLogs):
+    def __init__(self, switchId , switchStatus):
         self.__id = switchId
         self.__status = switchStatus
-        self.__trafficLogs = TrafficLogs
-
 
     # Function to set the status of the switch
     def setStatus(self, newStatus):
@@ -31,11 +33,11 @@ class Switch:
     # Push to traffic logs
     def logTraffic(self, traffic):
         self.__trafficLogs.append(traffic)
-        print("Switch: ", self.__id, "Traffic loggeg ", traffic)
+        print("Switch: ", self.__id, "Traffic logged ", traffic)
     
     # To print out the traffic logs from the log table
     def showTrafficLogs(self):
-        print("Traffic log for switch: ", self.__ids)
+        print("Traffic log for switch: ", self.__id)
         for log in self.__trafficLogs:
             print(log)
     

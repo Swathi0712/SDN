@@ -35,4 +35,5 @@ class Logger{
             return instance;
         }
 
+        // Delete copy constructor and assignment operator
 };
