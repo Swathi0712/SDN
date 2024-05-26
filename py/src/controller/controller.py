@@ -4,7 +4,6 @@ from switch import Switch
 import math
 
 class RoutingTableEntry:
-    # private members
     destination = ""
     nextHop = []       
     cost = math.inf
@@ -20,6 +19,7 @@ class Controller:
     # List to store switch objects
     __switches = []
     __routingTable = [] 
+    __loadBalancerIndex = {}
     
     # public members
 
@@ -77,5 +77,19 @@ class Controller:
                 self.__routingTable.append(entry)
                 
     # Method to perform routing based on destination IP Address
-    
+    def route(self, dest):
+        for entry in self.__routingTable:
+            if(entry.destination == dest):
+                hops = entry.nextHop
                 
+                # Checking if the key exists in the dictionary
+                if dest not in self.__loadBalancerIndex:
+                    self.__loadBalancerIndex[dest] = 0
+                
+                index = self.__loadBalancerIndex[dest]%len(hops)
+                self.__loadBalancerIndex[dest]+=1
+                return hops[index]
+    
+        # If destination not found in routing table return "drop packet" 
+        return "DROP PACKET"
+         

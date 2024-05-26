@@ -40,10 +40,14 @@ e3 = rte("destination_A", ["switch1"], 2)
 e4 = rte("destination_B", ["switch1"], 2)
 update2 = [e3, e4]
 
+# Test to update routing table in the controller
 control.updateRoutingTable(update1)
 control.updateRoutingTable(update2)
 
+# Simulate routing based on destination IP address
+nxtHop = control.route("destination_B")
+print("Next hop for destination B: ", nxtHop)
 
-
-
-
+# Testing handling of network events
+control.handleNetworkEvent("Link Up")
+control.handleNetworkEvent("Link Down")
