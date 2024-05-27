@@ -92,4 +92,33 @@ class Controller:
     
         # If destination not found in routing table return "drop packet" 
         return "DROP PACKET"
+
+    # Method to handle link failures
+    def handleLinkFailure(self, failedLink):
+        for entry in self.__routingTable:
+            hops = entry.nextHop
+            # Removing the failed link (switch) from the list of available next hops(switches)
+            hops.remove(failedLink)
+            # If next hops for a particular destination is empty then make its cost infinity
+            if len(hops)==0:
+                entry.cost = math.inf
+                
+        self.sendTriggeredUpdate()
+        
+    # Method to send triggered updates to switches
+    def sendTriggeredUpdate(self):
+        for swt in self.__switches:
+            swt.receiveControlMessage(self.createUpdateMessage())
+        print("Triggered updates sent to all switches")
+        
+    # Method to create update message
+    def createUpdateMessage(self):
+        message = "Update: "
+        for entry in self.__routingTable:
+            for hop in entry.nextHop:
+                message += " " +  entry.destination + ","  + hop  + "," + str(entry.cost) +"\n"
+        return message       
+    
+    # 
+   
          

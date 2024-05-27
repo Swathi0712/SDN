@@ -51,3 +51,8 @@ print("Next hop for destination B: ", nxtHop)
 # Testing handling of network events
 control.handleNetworkEvent("Link Up")
 control.handleNetworkEvent("Link Down")
+
+# Handling Link failure
+control.handleLinkFailure("switch2")
+
+# 
