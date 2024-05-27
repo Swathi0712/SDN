@@ -1,4 +1,6 @@
 import sys
+import threading
+import time
 sys.path.insert(0, 'D:\\SDN\\py\\src\\switch')
 from switch import Switch
 sys.path.insert(0,'D:\\SDN\\py\\src\\controller')
@@ -55,4 +57,14 @@ control.handleNetworkEvent("Link Down")
 # Handling Link failure
 control.handleLinkFailure("switch2")
 
-# 
+# Start periodic updates with an interval of 5 seconds
+control.startPeriodicUpdates()
+
+# try:
+#     while(True):
+#         time.sleep(5)
+# except KeyboardInterrupt:
+#     control.running = False
+
+time.sleep(15)
+control.stopPeriodicUpdates()

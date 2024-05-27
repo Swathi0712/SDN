@@ -2,6 +2,8 @@ import sys
 sys.path.append(r'D:\SDN\py\src\switch')
 from switch import Switch
 import math
+import threading
+import time
 
 class RoutingTableEntry:
     destination = ""
@@ -22,7 +24,12 @@ class Controller:
     __loadBalancerIndex = {}
     
     # public members
-
+    running = False
+    
+    # Constructor
+    def __init__(self):
+        self.running = True
+        
     # Add a new switch to the controller
     def addSwitch(self, swt):
         self.__switches.append(swt)
@@ -119,6 +126,29 @@ class Controller:
                 message += " " +  entry.destination + ","  + hop  + "," + str(entry.cost) +"\n"
         return message       
     
-    # 
-   
-         
+    # Method to send periodic updates to switches
+    def sendPeriodicUpdate(self):
+        for swt in self.__switches:
+            swt.receiveControlMessage(self.createUpdateMessage())
+        print("Periodic updates...")
+        
+    # Method to start periodic updates
+    def startPeriodicUpdates(self):
+        def f():
+            print(self.running)
+            while self.running:
+                self.sendPeriodicUpdate()
+                time.sleep(5)
+        global t1 
+        t1 = threading.Thread(target=f)
+        # t1.daemon = True
+        t1.start()
+
+    
+    # Method to stop periodic updates
+    def stopPeriodicUpdates(self):
+        self.running = False
+        t1.join()
+        print("Periodic Updates stopped")
+        
+    
