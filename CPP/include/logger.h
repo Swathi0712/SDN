@@ -1,3 +1,6 @@
+#ifndef LOGGER_H 
+#define LOGGER_H 
+
 #include <iostream>
 #include <fstream>
 #include <mutex>
@@ -37,3 +40,5 @@ class Logger{
 
         // Delete copy constructor and assignment operator
 };
+
+#endif

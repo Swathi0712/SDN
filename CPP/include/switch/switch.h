@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../logger.h"
 using namespace std;
 
 class Switch {
@@ -11,6 +12,9 @@ class Switch {
         string id;
         bool status;
         vector<string> trafficLogs;
+        void logEvent(string event){
+            Logger::getInstance().log(event);
+        }
 
     public:
         // Initialising Switch status and switch ID
@@ -40,23 +44,27 @@ class Switch {
         // Function to display received control message
         void receiveControlMessage(const string message)
         {
-            cout << "Switch: " << id << " Received control message:\n " << message << endl;
+            // cout << "Switch: " << id << " Received control message:\n " << message << endl;
+            logEvent("Switch: " + id + " Received control message:\n " + message + "\n");
         }
 
         void logTraffic(string traffic)
         {
             // Push to traffic logs
             trafficLogs.push_back(traffic);
-            cout << "Switch: " << id << " Traffic logged: " << traffic << endl;
+            // cout << "Switch: " << id << " Traffic logged: " << traffic << endl;
+            logEvent("Switch: " + id + " Traffic logged: " + traffic + "\n");
         }
 
         void showTrafficLogs()
         {
             // To print out the traffic logs from the log table
-            cout << "Traffic log for switch: " << id << endl;
+            // cout << "Traffic log for switch: " << id << endl;
+            logEvent("Traffic log for switch: " + id + "\n");
             for (auto log : trafficLogs)
             {
-                cout << log << endl;
+                // cout << log << endl;
+                logEvent(log + "\n");
             }
         }
     };

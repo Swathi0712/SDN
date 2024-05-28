@@ -1,9 +1,39 @@
 #include <iostream>
 #include "../include/controller/controller.h"
 #include "../include/switch/switch.h"
+#include <ctime>
 using namespace std;
 
+void logEvent(string event){
+    Logger::getInstance().log(event);
+};
+
+auto printTime(){
+ // Declaring argument for time() 
+    time_t tt; 
+  
+    // Declaring variable to store return value of 
+    // localtime() 
+    struct tm* ti; 
+  
+    // Applying time() 
+    time(&tt); 
+  
+    // Using localtime() 
+    ti = localtime(&tt); 
+
+    // Starting log event
+    auto t = asctime(ti);
+
+    return t;
+};
+
 int main(){
+   
+    logEvent(printTime());
+    logEvent("\n----------------------------------:Staring Log:------------------------------------\n");
+    // cout << asctime(ti);
+
     // Create a controller instance
     Controller control;
 
@@ -43,11 +73,13 @@ int main(){
 
     // Simulate routing based on destination IP address
     string nxtHop = control.route("destination_B");
-    cout << "Next hop for destination B: " << nxtHop <<endl;
+    // cout << "Next hop for destination B: " << nxtHop <<endl;
+    logEvent("Next hop for destination B: " + nxtHop + "\n");
 
     control.updateRoutingTable(update2);
     string nxt = control.route("destination_B");
-    cout << "Next hop for destination B: " << nxt <<endl;
+    // cout << "Next hop for destination B: " << nxt <<endl;
+    logEvent("Next hop for destination B: " + nxt +"\n");
 
     // Testing handling of network events
     control.handleNetworkEvent("Link Up");
@@ -58,8 +90,13 @@ int main(){
 
     // Start periodic updates with an interval of 5 seconds
     control.startPeriodicUpdate();
+    
     // Keep the program running to observe periodic updates
     this_thread::sleep_for(30000ms);
     
+    // Stopping log event
+    logEvent(printTime());
+    logEvent("\n----------------------------------:Stopping Log:------------------------------------\n");
+
     return 0;
 }

@@ -7,6 +7,7 @@
 #include <atomic>
 #include <unordered_map>
 #include "../switch/switch.h"
+#include "../logger.h"
 
 using namespace std;
 using namespace std::this_thread;
@@ -32,6 +33,11 @@ class Controller{
 
         // Index for round robin load balancing
         unordered_map <string, int> loadBalancerIndex;
+
+        // function to log events to the network log
+        void logEvent(string event){
+            Logger::getInstance().log(event);
+        }
     
     public:
         // Constructor initialising the atomic flag
@@ -47,7 +53,8 @@ class Controller{
         // Add a new switch to the controller
         void addSwitch(const Switch& swt){
             switches.push_back(swt);
-            cout << "Switch added to the conroller" << endl;
+            // cout << "Switch added to the conroller" << endl;
+            logEvent("Switch added to the conroller\n");
         }
 
         // Remove switch from the controller
@@ -60,25 +67,30 @@ class Controller{
                 }
             }
             if(found){
-                cout << "found" <<endl;
+                // cout << "found" <<endl;
+                logEvent("Switch: " + swt.getId() + " removed\n");
             }
             else{
-                cout << "not found" << endl;
+                // cout << "not found" << endl;
+                logEvent("Switch: " + swt.getId() + " not found\n");
             }
         }
 
         // method to send control message to all switches
         void sendControlMessage(string message){
-            // cout << " Control message sent:" << message << endl;
             for(auto& st:switches){
                 st.receiveControlMessage(message);
             }
-            cout << " Control message sent to all switches" << endl;
+            // cout << " Control message sent to all switches" << endl;
+            logEvent("Control message sent to all switches\n");
         }
 
         // Method to handle network events
         void handleNetworkEvent(string event){
-            cout << "Handled network event:" << event << endl;
+            // cout << "Handled network event:" << event << endl;
+
+            logEvent("Handled network event: " + event + "\n");
+
             // Perform actions based on network events
             if(event == "Link Up"){
                 // Send a message to all switches to enable ports(Set status as Active)
@@ -125,6 +137,7 @@ class Controller{
                 }
             }
             // If destination not found in routing table return "drop packet" 
+            logEvent("DROP PACKET " + destination + "\n");
             return "DROP PACKET";
         }
 
@@ -147,7 +160,8 @@ class Controller{
             for(auto& swt:switches){
                 swt.receiveControlMessage( createUpdateMessage());
             }
-            cout << "Triggered updates sent to all switches" << endl;
+            // cout << "Triggered updates sent to all switches" << endl;
+            logEvent("Triggered updates sent to all switches\n");
         }
 
         // Method to create update message
@@ -166,7 +180,8 @@ class Controller{
             for(auto& swt:switches){
                 swt.receiveControlMessage( createUpdateMessage());
             }
-            cout << "Periodic update..." << endl;
+            // cout << "Periodic update..." << endl;
+            logEvent("Periodic updates sent...\n");
         }
         
         // Method to start periodic updates
