@@ -1,9 +1,39 @@
 #include <iostream>
 #include "../include/controller/controller.h"
 #include "../include/switch/switch.h"
+#include <ctime>
 using namespace std;
 
+void logEvent(string event){
+    Logger::getInstance().log(event);
+};
+
+auto printTime(){
+ // Declaring argument for time() 
+    time_t tt; 
+  
+    // Declaring variable to store return value of 
+    // localtime() 
+    struct tm* ti; 
+  
+    // Applying time() 
+    time(&tt); 
+  
+    // Using localtime() 
+    ti = localtime(&tt); 
+
+    // Starting log event
+    auto t = asctime(ti);
+
+    return t;
+};
+
 int main(){
+   
+    logEvent(printTime());
+    logEvent("\n----------------------------------:Staring Log:------------------------------------\n");
+    // cout << asctime(ti);
+
     // Create a controller instance
     Controller control;
 
@@ -26,5 +56,47 @@ int main(){
     // Show traffic logs
     switch1.showTrafficLogs();
     switch2.showTrafficLogs();
+
+    // Simulate network events
+    vector <RoutingTableEntry> update1 = {
+        {"destination_A", {"switch2"}, 2},   // Update from switch1 to switch2
+        {"destination_B", {"switch2"}, 2}
+    };
+
+    vector <RoutingTableEntry> update2 = {
+        {"destination_C", {"switch1"}, 2},   // Update from switch1 to switch2
+        {"destination_B", {"switch1"}, 2}
+    };
+
+    // Test to update routing table in the controller
+    control.updateRoutingTable(update1);
+
+    // Simulate routing based on destination IP address
+    string nxtHop = control.route("destination_B");
+    // cout << "Next hop for destination B: " << nxtHop <<endl;
+    logEvent("Next hop for destination B: " + nxtHop + "\n");
+
+    control.updateRoutingTable(update2);
+    string nxt = control.route("destination_B");
+    // cout << "Next hop for destination B: " << nxt <<endl;
+    logEvent("Next hop for destination B: " + nxt +"\n");
+
+    // Testing handling of network events
+    control.handleNetworkEvent("Link Up");
+    control.handleNetworkEvent("Link Down");
+
+    // Handling Link failure
+    control.handleLinkFailure("switch1"); 
+
+    // Start periodic updates with an interval of 5 seconds
+    control.startPeriodicUpdate();
+    
+    // Keep the program running to observe periodic updates
+    this_thread::sleep_for(30000ms);
+    
+    // Stopping log event
+    logEvent(printTime());
+    logEvent("\n----------------------------------:Stopping Log:------------------------------------\n");
+
     return 0;
 }
