@@ -1,6 +1,8 @@
 import sys
 sys.path.append(r'D:\SDN\py\src\switch')
 from switch import Switch
+sys.path.append(r'D:\SDN\py\src')
+from logger import logEvent
 import math
 import threading
 import time
@@ -33,7 +35,8 @@ class Controller:
     # Add a new switch to the controller
     def addSwitch(self, swt):
         self.__switches.append(swt)
-        print("Switch added to controller")
+        # print("Switch added to controller")
+        logEvent("Switch added to controller")
 
     # Remove switch from the controller
     def removeSwitch(self, swt):
@@ -43,19 +46,23 @@ class Controller:
                 self.__switches.remove(i)
                 found = True
         if(found):
-            print("found")
+            # print("found")
+            logEvent("Switch: " + swt.getId() + "removed")
         else:
-            print("not found")
+            # print("not found")
+            logEvent("Switch:" +swt.getId() + "not found")
 
     # method to send control message to all switches
     def sendControlMessage(self, message):
         for i in self.__switches:
             i.receiveControlMessage(message)
-        print(" Control message sent to all switches ")
+        # print(" Control message sent to all switches ")
+        logEvent(" Control message sent to all switches ")
     
     # Method to handle network events
     def handleNetworkEvent(self, event):
-        print("Handled network event:")
+        # print("Handled network event:")
+        logEvent("Handled network event:")
         # Perform actions based on network events
         if event == "Link Up":
             # Send a message to all switches to enable ports(Set status as Active)
@@ -116,7 +123,8 @@ class Controller:
     def sendTriggeredUpdate(self):
         for swt in self.__switches:
             swt.receiveControlMessage(self.createUpdateMessage())
-        print("Triggered updates sent to all switches")
+        # print("Triggered updates sent to all switches")
+        logEvent("Triggered updates sent to all switches")
         
     # Method to create update message
     def createUpdateMessage(self):
@@ -130,12 +138,12 @@ class Controller:
     def sendPeriodicUpdate(self):
         for swt in self.__switches:
             swt.receiveControlMessage(self.createUpdateMessage())
-        print("Periodic updates...")
+        logEvent("Periodic updates...")
         
     # Method to start periodic updates
     def startPeriodicUpdates(self):
         def f():
-            print(self.running)
+            # print(self.running)
             while self.running:
                 self.sendPeriodicUpdate()
                 time.sleep(5)
@@ -149,6 +157,5 @@ class Controller:
     def stopPeriodicUpdates(self):
         self.running = False
         t1.join()
-        print("Periodic Updates stopped")
-        
-    
+        logEvent("Periodic Updates stopped")
+          

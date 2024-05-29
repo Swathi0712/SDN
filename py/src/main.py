@@ -1,14 +1,19 @@
 import sys
-import threading
 import time
+import datetime
 sys.path.insert(0, 'D:\\SDN\\py\\src\\switch')
 from switch import Switch
 sys.path.insert(0,'D:\\SDN\\py\\src\\controller')
+from logger import logEvent
 # import controller
 # from typing import TYPE_CHECKING 
 # if TYPE_CHECKING:
 from controller import Controller, RoutingTableEntry as rte
 
+# using now() to get current time
+current_time = datetime.datetime.now()
+logEvent(current_time)
+logEvent("------------------------------------Starting log event----------------------------------------")
 
 # Create a controller instance
 control = Controller()
@@ -48,7 +53,7 @@ control.updateRoutingTable(update2)
 
 # Simulate routing based on destination IP address
 nxtHop = control.route("destination_B")
-print("Next hop for destination B: ", nxtHop)
+logEvent("Next hop for destination B: " + nxtHop)
 
 # Testing handling of network events
 control.handleNetworkEvent("Link Up")
@@ -68,3 +73,8 @@ control.startPeriodicUpdates()
 
 time.sleep(15)
 control.stopPeriodicUpdates()
+
+logEvent("----------------------------------Stopping log event---------------------------------")
+# using now() to get current time
+current_time = datetime.datetime.now()
+logEvent(current_time)
