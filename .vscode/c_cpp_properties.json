@@ -3,7 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
-                "D:\\mys**"
+                "C:\\**"
+
             ],
             "defines": [
                 "_DEBUG",
@@ -13,7 +14,7 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "${default}",
-            "compilerPath": "D:/mys/ucrt64/bin/g++.exe"
+            "compilerPath": "C:/MinGW/bin/gcc.exe"
         },
         {
             "name": "cpp",
@@ -25,7 +26,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "D:/mys/ucrt64/bin/g++.exe",
+            "compilerPath": "C:/MinGW/bin/gcc.exe",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-msvc-x64"
