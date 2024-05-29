@@ -1,0 +1,58 @@
+2024-05-29 13:55:36.216850
+------------------------------------Starting log event----------------------------------------
+Switch added to controller
+Switch added to controller
+Switch: switch1Received control messageActivate
+Switch: switch2Received control messageActivate
+ Control message sent to all switches 
+Switch: switch1Traffic logged Packet1
+Switch: switch1Traffic logged Packet2
+Switch: switch2Traffic logged Packet3
+Traffic log for switch: switch1
+Packet1
+Packet2
+Packet3
+Traffic log for switch: switch2
+Packet1
+Packet2
+Packet3
+Next hop for destination B: switch2
+Handled network event:
+Switch: switch1Received control messageEnablePorts
+Switch: switch2Received control messageEnablePorts
+ Control message sent to all switches 
+Handled network event:
+Switch: switch1Received control messageDisablePorts
+Switch: switch2Received control messageDisablePorts
+ Control message sent to all switches 
+Switch: switch1Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Switch: switch2Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Triggered updates sent to all switches
+Switch: switch1Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Switch: switch2Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Periodic updates...
+Switch: switch1Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Switch: switch2Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Periodic updates...
+Switch: switch1Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Switch: switch2Received control messageUpdate:  destination_A,switch1,2
+ destination_B,switch1,2
+
+Periodic updates...
+Periodic Updates stopped
+----------------------------------Stopping log event---------------------------------
+2024-05-29 13:55:51.243839

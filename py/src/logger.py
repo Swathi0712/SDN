@@ -14,7 +14,7 @@ class Logger:
         return cls._instance
            
     def __init__(self):
-       self.__File = open("networkLog.txt" , "a")
+       self.__File = open("./py/src/networkLog.txt" , "a")
        if (self.__File).closed:
            print("Failed to open log file")
            
