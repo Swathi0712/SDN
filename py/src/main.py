@@ -4,11 +4,13 @@ import datetime
 sys.path.insert(0, 'D:\\SDN\\py\\src\\switch')
 from switch import Switch
 sys.path.insert(0,'D:\\SDN\\py\\src\\controller')
+from controller import Controller, RoutingTableEntry as rte
+sys.path.insert(0,'D:\\SDN\\py\\src\\northboundinterface.py')
+from northboundinterface import NorthBoundInterface
 from logger import logEvent
 # import controller
 # from typing import TYPE_CHECKING 
 # if TYPE_CHECKING:
-from controller import Controller, RoutingTableEntry as rte
 
 # using now() to get current time
 current_time = datetime.datetime.now()
