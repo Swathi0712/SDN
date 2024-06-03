@@ -3,33 +3,25 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\**"
-
+                "${workspaceFolder}/**",
+                // "C:\\msys\\mingw64\\include\\c++\\14.1.0",
+                "${workspaceFolder}/CPP/include",
+                "${workspaceFolder}/CPP/cpp-httplib"
+                // "C:/msys/ucrt64/include/c++/14.1.0/x86_64-w64-mingw32",
+                // "C:/msys/mingw64/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "${default}",
-            "compilerPath": "C:/MinGW/bin/gcc.exe"
-        },
-        {
-            "name": "cpp",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "compilerPath": "C:/MinGW/bin/gcc.exe",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64"
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPath": "C:/msys/ucrt64/bin/g++.exe",
+            "compilerArgs": [
+                "-lws2_32"
+            ]
         }
     ],
     "version": 4

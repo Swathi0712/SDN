@@ -1,14 +1,27 @@
+#include <winsock2.h>
+#include <windows.h>
 #include <iostream>
+#include <cstddef>
+
+// Undefine the 'byte' macro from Windows headers
+#undef byte
 #include "../include/controller/controller.h"
+#include "../include/northboundInterface.h"
 #include "../include/switch/switch.h"
 #include <ctime>
+#include <thread>
+#include <chrono>
+// #include <northboundInterface.h>
+// #include "httplib.h"
 using namespace std;
+using namespace std::this_thread;
+
 
 void logEvent(string event){
     Logger::getInstance().log(event);
 };
 
-auto printTime(){
+string printTime(){
  // Declaring argument for time() 
     time_t tt; 
   
@@ -29,13 +42,13 @@ auto printTime(){
 };
 
 int main(){
-   
     logEvent(printTime());
     logEvent("\n----------------------------------:Staring Log:------------------------------------\n");
     // cout << asctime(ti);
 
     // Create a controller instance
     Controller control;
+    NorthboundInterface nbi;
 
     // Create switch instances
     Switch switch1("switch1", true);
@@ -80,7 +93,9 @@ int main(){
     string nxt = control.route("destination_B");
     // cout << "Next hop for destination B: " << nxt <<endl;
     logEvent("Next hop for destination B: " + nxt +"\n");
-
+    
+    control.startPeriodicUpdate();
+    
     // Testing handling of network events
     control.handleNetworkEvent("Link Up");
     control.handleNetworkEvent("Link Down");
@@ -89,14 +104,22 @@ int main(){
     control.handleLinkFailure("switch1"); 
 
     // Start periodic updates with an interval of 5 seconds
-    control.startPeriodicUpdate();
-    
+    cout<<"starting the server..."<<endl;
+    // NorthboundInterface nbi;
+    std::thread nbiThread([&nbi]() {
+        nbi.start(8080); // Start the northbound interface on port 8080
+    });
+    nbiThread.detach();
     // Keep the program running to observe periodic updates
-    this_thread::sleep_for(30000ms);
+
+    this_thread::sleep_for(chrono::seconds(30));
     
     // Stopping log event
     logEvent(printTime());
     logEvent("\n----------------------------------:Stopping Log:------------------------------------\n");
+
+    //     // Clean up Winsock
+    // WSACleanup();
 
     return 0;
 }
