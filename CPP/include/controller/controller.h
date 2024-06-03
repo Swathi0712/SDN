@@ -8,9 +8,8 @@
 #include <unordered_map>
 #include "../switch/switch.h"
 #include "../logger.h"
-
 using namespace std;
-using namespace std::this_thread;
+// using namespace this_thread;
 
 struct RoutingTableEntry{
     string destination;
@@ -186,13 +185,16 @@ class Controller{
         
         // Method to start periodic updates
         void startPeriodicUpdate(){
+            cout<<"starting periodic updates...";
             auto f = [&](){
                 while(running){
                     sendPeriodicUpdates();
-                    sleep_for(5000ms);
+                    this_thread::sleep_for(chrono::seconds(5));
                 }
             };
-            thread(f).detach();
+            std::thread(f).detach();
+            
+            
         }
 
         // Method to stop periodic updates

@@ -1,5 +1,5 @@
 {
-  "C_Cpp.default.compilerPath": "D:\\mys\\ucrt64\\bin\\g++.exe",
+  "C_Cpp.default.compilerPath": "C:\\msys\\ucrt64\\bin\\g++.exe",
   "files.associations": {
     "atomic": "cpp",
     "cwchar": "cpp",

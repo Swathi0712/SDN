@@ -27,6 +27,7 @@ class Logger{
 
         // Method to log messages
         void log(string message){
+        std::lock_guard<std::mutex> lock(mtx);
             if(logfile.is_open()){
                 logfile << message << endl;
             }
@@ -39,6 +40,8 @@ class Logger{
         }
 
         // Delete copy constructor and assignment operator
+     Logger(const Logger&) = delete;
+    Logger& operator=(const Logger&) = delete;
 };
 
 #endif
