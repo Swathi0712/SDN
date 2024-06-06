@@ -1,6 +1,15 @@
 #include <iostream>
+#include <chrono>
+#include <cstdio>
+#include "../include/northboundinterface.h"
 #include "../include/controller/controller.h"
 #include "../include/switch/switch.h"
+#include <winsock2.h>
+#include <cstddef>
+#include <windows.h>
+// #include "../include/cpp-httplib-master/cpp-httplib-master/httplib.h"
+// #include "../include/httplib.h"
+// #include "../../../../mys/ucrt64/include/c++/13.2.0/httplib.h"
 #include <ctime>
 using namespace std;
 
@@ -37,6 +46,9 @@ int main(){
     // Create a controller instance
     Controller control;
 
+    // Create North Bound Interface instance
+    NorthBoundInterface nbi;
+
     // Create switch instances
     Switch switch1("switch1", true);
     Switch switch2("switch2", true);
@@ -44,6 +56,9 @@ int main(){
     // Add switches to the controller
     control.addSwitch(switch1);
     control.addSwitch(switch2);
+
+    // Start periodic updates with an interval of 5 seconds
+    // control.startPeriodicUpdate();
 
     // Send control messages
     control.sendControlMessage("Activate");
@@ -86,11 +101,11 @@ int main(){
     control.handleNetworkEvent("Link Down");
 
     // Handling Link failure
-    control.handleLinkFailure("switch1"); 
+    control.handleLinkFailure("switch1");
 
-    // Start periodic updates with an interval of 5 seconds
-    control.startPeriodicUpdate();
-    
+    // Creating a thread for starting the server
+    thread([&nbi](){nbi.start(8000);}).detach();
+
     // Keep the program running to observe periodic updates
     this_thread::sleep_for(30000ms);
     

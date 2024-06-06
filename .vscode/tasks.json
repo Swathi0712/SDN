@@ -6,6 +6,9 @@
             "command": "D:/mys/ucrt64/bin/gcc.exe",
             "args": [
                 "-fdiagnostics-color=always",
+                "-std=c++11",
+                "-lws2_32",
+                "-lpthread",
                 "-g",
                 "${file}",
                 "-o",
@@ -28,6 +31,10 @@
             "label": "C/C++: g++.exe build active file",
             "command": "D:/mys/ucrt64/bin/g++.exe",
             "args": [
+                "-I",
+                "${workspaceFolder}/CPP/cpp-httplib",
+                "-I",
+                "${workspaceFolder}/CPP/include",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
