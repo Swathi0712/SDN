@@ -61,21 +61,24 @@ class Controller{
         }
 
         // Remove switch from the controller
-        void removeSwitch(Switch& swt){
+        void removeSwitch(string id){
             bool found = false;
-            for(auto it = switches.begin(); it != switches.end();it++){
-                if((*it).getId()==swt.getId()){
+
+            typedef vector<Switch>::iterator swtitr;
+            for(swtitr it = switches.begin(); it != switches.end();it++){
+                if((*it).getId()==id){
                     switches.erase(it);
                     found = true;
+                    break;
                 }
             }
             if(found){
                 // cout << "found" <<endl;
-                logEvent("Switch: " + swt.getId() + " removed\n");
+                logEvent("Switch: " + id + " removed\n");
             }
             else{
                 // cout << "not found" << endl;
-                logEvent("Switch: " + swt.getId() + " not found\n");
+                logEvent("Switch: " + id + " not found\n");
             }
         }
 

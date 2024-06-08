@@ -1,10 +1,11 @@
 #ifndef NORTHBOUNDINTERFACE_H
 #define NORTHBOUNDINTERFACE_H
-
 #include <iostream>
 #include <string>
 #include "httplib.h"
 #include "controller/controller.h"
+#include <format>
+#include <typeinfo>
 using namespace std;
 
 
@@ -20,12 +21,22 @@ class NorthBoundInterface{
             // });
 
             // End point to add switch to the controller 
-            svr.Post("/addSwitch", [&](const httplib::Request& req, httplib::Response& res){
-                string Id = req.get_param_value("id");
+            svr.Post("/addSwitch/:id", [&](const httplib::Request& req, httplib::Response& res){
+                string Id = req.path_params.at("id");
                 Switch newSwitch(Id , true);
                 controller.addSwitch(newSwitch);
-                string message = "Switch added: " + Id;
-                res.set_content(message, "text/plain");
+                // string message = form
+                std::ostringstream message;
+                message << "Added switch:" << Id;
+                res.set_content(message.str(), "text/plain");
+            });
+
+            svr.Post("/removeSwitch/:id", [&](const httplib::Request& req, httplib::Response& res){
+                string Id = req.path_params.at("id");
+                controller.removeSwitch(Id);
+                std::ostringstream message;
+                message << "Removed switch with Id: " << Id;
+                res.set_content(message.str(), "text/plain");
             });
         }
 
