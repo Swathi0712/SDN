@@ -1,0 +1,10 @@
+^D:\SDN\CPP\BUILD\CMAKEFILES\A94A1269B7FA37671A4A4A7924A2FA1B\GENERATE.STAMP.RULE
+setlocal
+D:\cmake\bin\cmake.exe -SD:/SDN/CPP -BD:/SDN/CPP/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/SDN/CPP/build/MyProject.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

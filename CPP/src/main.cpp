@@ -47,7 +47,7 @@ int main(){
     Controller control;
 
     // Create North Bound Interface instance
-    NorthBoundInterface nbi;
+    NorthBoundInterface nbi(control);
 
     // Create switch instances
     Switch switch1("switch1", true);
@@ -56,9 +56,6 @@ int main(){
     // Add switches to the controller
     control.addSwitch(switch1);
     control.addSwitch(switch2);
-
-    // Start periodic updates with an interval of 5 seconds
-    // control.startPeriodicUpdate();
 
     // Send control messages
     control.sendControlMessage("Activate");
@@ -96,6 +93,9 @@ int main(){
     // cout << "Next hop for destination B: " << nxt <<endl;
     logEvent("Next hop for destination B: " + nxt +"\n");
 
+    // Start periodic updates with an interval of 5 seconds
+    control.startPeriodicUpdate();
+
     // Testing handling of network events
     control.handleNetworkEvent("Link Up");
     control.handleNetworkEvent("Link Down");
@@ -104,10 +104,12 @@ int main(){
     control.handleLinkFailure("switch1");
 
     // Creating a thread for starting the server
-    thread([&nbi](){nbi.start(8000);}).detach();
+    thread nbiThread([&nbi](){nbi.start(8000);});
+    nbiThread.detach();
 
     // Keep the program running to observe periodic updates
-    this_thread::sleep_for(30000ms);
+    this_thread::sleep_for(chrono::seconds(120));
+
     
     // Stopping log event
     logEvent(printTime());

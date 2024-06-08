@@ -54,10 +54,10 @@ class Controller{
         }
 
         // Add a new switch to the controller
-        void addSwitch(const Switch& swt){
+        void addSwitch(Switch& swt){
             switches.push_back(swt);
             // cout << "Switch added to the conroller" << endl;
-            logEvent("Switch added to the conroller\n");
+            logEvent("Switch " + swt.getId() + " added to the conroller\n");
         }
 
         // Remove switch from the controller
