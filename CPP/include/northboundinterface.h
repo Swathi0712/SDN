@@ -6,7 +6,10 @@
 #include "controller/controller.h"
 #include <format>
 #include <typeinfo>
+#include <unordered_map>
+#include <json.hpp>
 using namespace std;
+using json = nlohmann::json;
 
 
 class NorthBoundInterface{
@@ -31,12 +34,30 @@ class NorthBoundInterface{
                 res.set_content(message.str(), "text/plain");
             });
 
+            // End point to remove a switch from a controller
             svr.Post("/removeSwitch/:id", [&](const httplib::Request& req, httplib::Response& res){
                 string Id = req.path_params.at("id");
                 controller.removeSwitch(Id);
                 std::ostringstream message;
                 message << "Removed switch with Id: " << Id;
                 res.set_content(message.str(), "text/plain");
+            });
+
+            // End point to send a control message to all the switches 
+            svr.Post("/sendControlMessage", [&](const httplib::Request& req, httplib::Response& res){
+                auto bdy = json::parse(req.body);                
+                // cout << bdy;
+                string message = bdy.at("message").get<string>();
+                // cout << message << endl;
+                controller.sendControlMessage(message);
+                res.set_content("Control Message Sent: " + message, "text/plain");
+            });
+
+            // End point to simulate link failure 
+            svr.Post("/SimulateLinkFailure/:link", [&](const httplib::Request& req, httplib::Response& res){
+                string failedLink = req.path_params.at("link");
+                controller.handleLinkFailure(failedLink);
+                res.set_content("Link failure simulated for: " + failedLink, "text/plain");
             });
         }
 

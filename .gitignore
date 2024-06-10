@@ -1,7 +1,9 @@
 # Prerequisites
 *.d
-*.vscode
-./CPP/build/*
+.vscode/
+CPP/build/
+CPP/json/
+CPP/cpp-httplib/
 
 # Compiled Object files
 *.slo

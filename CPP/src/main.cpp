@@ -58,7 +58,7 @@ int main(){
     control.addSwitch(switch2);
 
     // Send control messages
-    control.sendControlMessage("Activate");
+    // control.sendControlMessage("Activate");
 
     // Log traffic
     switch1.logTraffic("Packet1");
@@ -101,7 +101,7 @@ int main(){
     control.handleNetworkEvent("Link Down");
 
     // Handling Link failure
-    control.handleLinkFailure("switch1");
+    // control.handleLinkFailure("switch1");
 
     // Creating a thread for starting the server
     thread nbiThread([&nbi](){nbi.start(8000);});

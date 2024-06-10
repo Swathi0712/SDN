@@ -5,7 +5,8 @@
       "includePath": [
         "${workspaceFolder}/**",
         "${workspaceFolder}/CPP/cpp-httplib",
-        "${workspaceFolder}/CPP/include"
+        "${workspaceFolder}/CPP/include",
+        "${workspaceFolder}/CPP/json/single_include/nlohmann"
         // "D:/mys/ucrt64/include/c++/13.2.0"
       ],
       "defines": [

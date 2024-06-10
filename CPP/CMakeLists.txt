@@ -9,7 +9,7 @@ project(MyProject)
 
 
 set(CMAKE_CXX_STANDARD 11)
-set(INCLUDE_PATHS cpp-httplib)
+set(INCLUDE_PATHS cpp-httplib json/single_include/nlohmann)
 
 # Include the Conan generated toolchain file
 # include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)

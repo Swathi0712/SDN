@@ -164,7 +164,7 @@ class Controller{
         // Method to send triggered updates to switches
         void sendTriggeredUpdate(){
             for(auto& swt:switches){
-                swt.receiveControlMessage( createUpdateMessage());
+                swt.receiveControlMessage(createUpdateMessage());
             }
             // cout << "Triggered updates sent to all switches" << endl;
             logEvent("Triggered updates sent to all switches\n");
@@ -195,7 +195,7 @@ class Controller{
             auto f = [&](){
                 while(running){
                     sendPeriodicUpdates();
-                    sleep_for(5000ms);
+                    sleep_for(10000ms);
                 }
             };
             thread(f).detach();
