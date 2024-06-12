@@ -63,7 +63,13 @@ class NorthBoundInterface{
             });
 
             svr.Post("/updateRoutingTable", [&](const httplib::Request& req, httplib::Response& res){
-                
+                string updates = req.body;
+                if(updates.empty()){
+                    res.status = 400;
+                    res.set_content("Missing routing table updates in the request body", "text/plain");
+                    return;   
+                }
+                vector<RoutingTableEntry> parsedUpdates = parseUpdates(updates);
             });
         }
 
