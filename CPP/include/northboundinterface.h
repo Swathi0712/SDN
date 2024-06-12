@@ -72,6 +72,19 @@ class NorthBoundInterface{
                 vector<RoutingTableEntry> parsedUpdates = parseUpdates(updates);
             });
         }
+        std::vector<RoutingTableEntry> parseUpdates(const std::string& updates) {
+        std::vector<RoutingTableEntry> entries;
+        std::istringstream iss(updates);
+        std::string line;
+        while (std::getline(iss, line)) {
+            std::istringstream lineStream(line);
+            std::string destination, nextHop;
+            int cost;
+            lineStream >> destination >> nextHop >> cost;
+            entries.push_back({destination, {nextHop}, cost});
+        }
+        return entries;
+    }
 
         public:
             NorthBoundInterface(Controller& ctrl):controller(ctrl){
