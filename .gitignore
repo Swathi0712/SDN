@@ -1,7 +1,6 @@
 # Prerequisites
 *.d
-*.vscode
-.vscode
+.vscode/
 CPP/build
 CPP/json
 CPP/cpp-httplib
