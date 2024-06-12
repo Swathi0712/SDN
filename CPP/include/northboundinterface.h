@@ -71,6 +71,24 @@ class NorthBoundInterface{
                 }
                 vector<RoutingTableEntry> parsedUpdates = parseUpdates(updates);
             });
+
+            // switch status
+            server.Get("/switches", [&](const httplib::Request& req, httplib::Response& res) {
+            std::string response = getSwitchesStatus();
+            res.set_content(response, "application/json");
+        });
+
+        // Get Routing Table
+        server.Get("/routingTable", [&](const httplib::Request& req, httplib::Response& res) {
+            std::string response = getRoutingTable();
+            res.set_content(response, "application/json");
+        });
+
+        // Get Logs
+        server.Get("/logs", [&](const httplib::Request& req, httplib::Response& res) {
+            std::string logs = getLogs();
+            res.set_content(logs, "text/plain");
+        });
         }
         std::vector<RoutingTableEntry> parseUpdates(const std::string& updates) {
         std::vector<RoutingTableEntry> entries;
@@ -84,6 +102,43 @@ class NorthBoundInterface{
             entries.push_back({destination, {nextHop}, cost});
         }
         return entries;
+    }
+    
+     std::string getSwitchesStatus() {
+        std::ostringstream oss;
+        oss << "{ \"switches\": [";
+        auto switches = controller.getSwitches();
+        for (size_t i = 0; i < switches.size(); ++i) {
+            oss << "\"" << switches[i].getName() << "\"";
+            if (i < switches.size() - 1) oss << ", ";
+        }
+        oss << "] }";
+        return oss.str();
+    }
+
+    std::string getRoutingTable() {
+        std::ostringstream oss;
+        oss << "{ \"routingTable\": [";
+        auto routingTable = controller.getRoutingTable();
+        for (size_t i = 0; i < routingTable.size(); ++i) {
+            oss << "{ \"destination\": \"" << routingTable[i].destination
+                << "\", \"nextHops\": [";
+            for (size_t j = 0; j < routingTable[i].nextHops.size(); ++j) {
+                oss << "\"" << routingTable[i].nextHops[j] << "\"";
+                if (j < routingTable[i].nextHops.size() - 1) oss << ", ";
+            }
+            oss << "], \"cost\": " << routingTable[i].cost << "}";
+            if (i < routingTable.size() - 1) oss << ", ";
+        }
+        oss << "] }";
+        return oss.str();
+    }
+
+    std::string getLogs() {
+        std::ifstream logFile("network_log.txt");
+        std::ostringstream oss;
+        oss << logFile.rdbuf();
+        return oss.str();
     }
 
         public:
