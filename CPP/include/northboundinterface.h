@@ -28,7 +28,6 @@ class NorthBoundInterface{
                 string Id = req.path_params.at("id");
                 Switch newSwitch(Id , true);
                 controller.addSwitch(newSwitch);
-                // string message = form
                 std::ostringstream message;
                 message << "Added switch:" << Id;
                 res.set_content(message.str(), "text/plain");
@@ -46,9 +45,7 @@ class NorthBoundInterface{
             // End point to send a control message to all the switches 
             svr.Post("/sendControlMessage", [&](const httplib::Request& req, httplib::Response& res){
                 auto bdy = json::parse(req.body);                
-                // cout << bdy;
                 string message = bdy.at("message").get<string>();
-                // cout << message << endl;
                 controller.sendControlMessage(message);
                 res.set_content("Control Message Sent: " + message, "text/plain");
             });
@@ -56,8 +53,17 @@ class NorthBoundInterface{
             // End point to simulate link failure 
             svr.Post("/SimulateLinkFailure/:link", [&](const httplib::Request& req, httplib::Response& res){
                 string failedLink = req.path_params.at("link");
+                if(failedLink == ""){
+                    res.status = 400;
+                    res.set_content("Missing link paramete", "text/plain");
+                    return;
+                }
                 controller.handleLinkFailure(failedLink);
                 res.set_content("Link failure simulated for: " + failedLink, "text/plain");
+            });
+
+            svr.Post("/updateRoutingTable", [&](const httplib::Request& req, httplib::Response& res){
+                
             });
         }
 
