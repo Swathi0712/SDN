@@ -73,23 +73,24 @@ class NorthBoundInterface{
             });
 
             // switch status
-            server.Get("/switches", [&](const httplib::Request& req, httplib::Response& res) {
-            std::string response = getSwitchesStatus();
-            res.set_content(response, "application/json");
+            svr.Get("/switches", [&](const httplib::Request& req, httplib::Response& res) {
+                std::string response = getSwitchesStatus();
+                res.set_content(response, "application/json");
         });
 
         // Get Routing Table
-        server.Get("/routingTable", [&](const httplib::Request& req, httplib::Response& res) {
-            std::string response = getRoutingTable();
-            res.set_content(response, "application/json");
+            svr.Get("/routingTable", [&](const httplib::Request& req, httplib::Response& res) {
+                std::string response = getRoutingTable();
+                res.set_content(response, "application/json");
         });
 
         // Get Logs
-        server.Get("/logs", [&](const httplib::Request& req, httplib::Response& res) {
-            std::string logs = getLogs();
-            res.set_content(logs, "text/plain");
+            svr.Get("/logs", [&](const httplib::Request& req, httplib::Response& res) {
+                std::string logs = getLogs();
+                res.set_content(logs, "text/plain");
         });
         }
+        
         std::vector<RoutingTableEntry> parseUpdates(const std::string& updates) {
         std::vector<RoutingTableEntry> entries;
         std::istringstream iss(updates);
@@ -106,15 +107,16 @@ class NorthBoundInterface{
     
      std::string getSwitchesStatus() {
         std::ostringstream oss;
-        oss << "{ \"switches\": [";
+        oss << "{ \"switches\": ["; 
         auto switches = controller.getSwitches();
         for (size_t i = 0; i < switches.size(); ++i) {
-            oss << "\"" << switches[i].getName() << "\"";
+            oss << "\"" << switches[i].getId() << "\"";
             if (i < switches.size() - 1) oss << ", ";
         }
         oss << "] }";
         return oss.str();
     }
+
 
     std::string getRoutingTable() {
         std::ostringstream oss;
@@ -123,9 +125,9 @@ class NorthBoundInterface{
         for (size_t i = 0; i < routingTable.size(); ++i) {
             oss << "{ \"destination\": \"" << routingTable[i].destination
                 << "\", \"nextHops\": [";
-            for (size_t j = 0; j < routingTable[i].nextHops.size(); ++j) {
-                oss << "\"" << routingTable[i].nextHops[j] << "\"";
-                if (j < routingTable[i].nextHops.size() - 1) oss << ", ";
+            for (size_t j = 0; j < routingTable[i].nextHop.size(); ++j) {
+                oss << "\"" << routingTable[i].nextHop[j] << "\"";
+                if (j < routingTable[i].nextHop.size() - 1) oss << ", ";
             }
             oss << "], \"cost\": " << routingTable[i].cost << "}";
             if (i < routingTable.size() - 1) oss << ", ";
@@ -141,19 +143,19 @@ class NorthBoundInterface{
         return oss.str();
     }
 
-        public:
-            NorthBoundInterface(Controller& ctrl):controller(ctrl){
-                // controller = ctrl;
-                setUpRoutes();
-            }
+    public:
+        NorthBoundInterface(Controller& ctrl):controller(ctrl){
+            // controller = ctrl;
+            setUpRoutes();
+        }
 
-            void start(int port){
-                svr.listen("0.0.0.0", port);
-            }
+        void start(int port){
+            svr.listen("0.0.0.0", port);
+        }
 
-            void stop(){
-                svr.stop();
-            }
+        void stop(){
+            svr.stop();
+        }
 };
 
 #endif

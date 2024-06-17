@@ -205,6 +205,16 @@ class Controller{
         void stopPeriodicUpdates(){
             running =  false;
         } 
+
+        vector<Switch> getSwitches(){
+            vector<Switch> swt = switches;
+            return swt;
+        }
+
+        vector<RoutingTableEntry> getRoutingTable(){
+            vector<RoutingTableEntry> rte = routingTable;
+            return rte;
+        }
 };
 
 #endif
