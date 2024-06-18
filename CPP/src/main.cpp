@@ -81,14 +81,14 @@ int main(){
     };
 
     // Test to update routing table in the controller
-    control.updateRoutingTable(update1);
+    // control.updateRoutingTable(update1);
 
     // Simulate routing based on destination IP address
     string nxtHop = control.route("destination_B");
     // cout << "Next hop for destination B: " << nxtHop <<endl;
     logEvent("Next hop for destination B: " + nxtHop + "\n");
 
-    control.updateRoutingTable(update2);
+    // control.updateRoutingTable(update2);
     string nxt = control.route("destination_B");
     // cout << "Next hop for destination B: " << nxt <<endl;
     logEvent("Next hop for destination B: " + nxt +"\n");
@@ -108,7 +108,7 @@ int main(){
     nbiThread.detach();
 
     // Keep the program running to observe periodic updates
-    this_thread::sleep_for(chrono::seconds(120));
+    this_thread::sleep_for(chrono::seconds(600));
 
     
     // Stopping log event

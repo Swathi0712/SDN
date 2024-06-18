@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "../switch/switch.h"
 #include "../logger.h"
+#include "../IPAddressManager.h"
 
 using namespace std;
 using namespace std::this_thread;
@@ -37,6 +38,9 @@ class Controller{
         // Index for round robin load balancing
         unordered_map <string, int> loadBalancerIndex;
 
+        // Create IPAddressMangager instance
+        IPAddressManager ipManager;
+
         // function to log events to the network log
         void logEvent(string event){
             Logger::getInstance().log(event);
@@ -44,7 +48,7 @@ class Controller{
     
     public:
         // Constructor initialising the atomic flag
-        Controller(){
+        Controller() : ipManager("192.168.1.1"){
             running = true;
         }
 
@@ -55,26 +59,44 @@ class Controller{
 
         // Add a new switch to the controller
         void addSwitch(Switch& swt){
+            string ip = ipManager.allocateIP();
+            swt.setIP(ip);
             switches.push_back(swt);
+            RoutingTableEntry tmp;
+            tmp.destination = ip;
+            tmp.nextHop = {};
+            tmp.cost = 0;
+            routingTable.push_back(tmp);
             // cout << "Switch added to the conroller" << endl;
-            logEvent("Switch " + swt.getId() + " added to the conroller\n");
+            logEvent("Switch " + swt.getId() + " added with ip: " + ip +" to the conroller\n");
         }
 
         // Remove switch from the controller
         void removeSwitch(string id){
             bool found = false;
-
+            string currentIP;
             typedef vector<Switch>::iterator swtitr;
             for(swtitr it = switches.begin(); it != switches.end();it++){
                 if((*it).getId()==id){
+                    currentIP = (*it).getIP(); 
+                    ipManager.releaseIP(currentIP);
                     switches.erase(it);
+                    // Find and remove the erased IP from the routing table 
+                    for(auto entry = routingTable.begin(); entry!=routingTable.end(); entry++){
+                        if ((*entry).destination == currentIP){
+                            routingTable.erase(entry);
+                            logEvent("Routing Table Entry with destination IP:" + currentIP + " removed\n");
+                            break;
+                        }
+                    }
                     found = true;
                     break;
                 }
             }
             if(found){
                 // cout << "found" <<endl;
-                logEvent("Switch: " + id + " removed\n");
+                logEvent("Switch with id: " + id + " removed\n");
+                logEvent("Released IP: " +  currentIP + "\n");
             }
             else{
                 // cout << "not found" << endl;

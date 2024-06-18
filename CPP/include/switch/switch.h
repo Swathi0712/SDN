@@ -11,6 +11,7 @@ class Switch {
     private:
         string id;
         bool status;
+        string ip;
         vector<string> trafficLogs;
         void logEvent(string event){
             Logger::getInstance().log(event);
@@ -23,6 +24,15 @@ class Switch {
 
         }
 
+        // Allocate IP to a switch
+        void setIP(string i_p){
+            ip = i_p;
+        }
+
+        string getIP(){
+            return ip;
+        }
+         
         // Function to set the status of the switch
         void setStatus(bool newStatus)
         {
