@@ -89,6 +89,7 @@ class Controller{
                             break;
                         }
                     }
+                    handleLinkFailure(currentIP);
                     found = true;
                     break;
                 }

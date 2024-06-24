@@ -17,11 +17,6 @@ class NorthBoundInterface{
         httplib::Server svr;
         Controller& controller;
         void setUpRoutes(){
-            // Testing routes
-            // svr.Get("/addSwitch", [&](const httplib::Request&  req, httplib::Response& res ){
-            //     // string id = req.get_param_value("id");
-            //     res.set_content("hello world", "text/plain");
-            // });
 
             // End point to add switch to the controller 
             svr.Post("/addSwitch/:id", [&](const httplib::Request& req, httplib::Response& res){
