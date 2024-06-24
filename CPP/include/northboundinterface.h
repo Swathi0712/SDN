@@ -25,16 +25,24 @@ class NorthBoundInterface{
 
             // End point to add switch to the controller 
             svr.Post("/addSwitch/:id", [&](const httplib::Request& req, httplib::Response& res){
+
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 string Id = req.path_params.at("id");
                 Switch newSwitch(Id , true);
                 controller.addSwitch(newSwitch);
                 std::ostringstream message;
                 message << "Added switch:" << Id;
+                
                 res.set_content(message.str(), "text/plain");
             });
 
             // End point to remove a switch from a controller
             svr.Post("/removeSwitch/:id", [&](const httplib::Request& req, httplib::Response& res){
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 string Id = req.path_params.at("id");
                 controller.removeSwitch(Id);
                 std::ostringstream message;
@@ -44,6 +52,9 @@ class NorthBoundInterface{
 
             // End point to send a control message to all the switches 
             svr.Post("/sendControlMessage", [&](const httplib::Request& req, httplib::Response& res){
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 auto bdy = json::parse(req.body);                
                 string message = bdy.at("message").get<string>();
                 controller.sendControlMessage(message);
@@ -52,6 +63,9 @@ class NorthBoundInterface{
 
             // End point to simulate link failure 
             svr.Post("/SimulateLinkFailure/:link", [&](const httplib::Request& req, httplib::Response& res){
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 string failedLink = req.path_params.at("link");
                 if(failedLink == ""){
                     res.status = 400;
@@ -63,6 +77,9 @@ class NorthBoundInterface{
             });
 
             svr.Post("/updateRoutingTable", [&](const httplib::Request& req, httplib::Response& res){
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 string updates = req.body;
                 if(updates.empty()){
                     res.status = 400;
@@ -74,18 +91,27 @@ class NorthBoundInterface{
 
             // switch status
             svr.Get("/switches", [&](const httplib::Request& req, httplib::Response& res) {
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 std::string response = getSwitchesStatus();
                 res.set_content(response, "application/json");
         });
 
         // Get Routing Table
             svr.Get("/routingTable", [&](const httplib::Request& req, httplib::Response& res) {
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 std::string response = getRoutingTable();
                 res.set_content(response, "application/json");
         });
 
         // Get Logs
             svr.Get("/logs", [&](const httplib::Request& req, httplib::Response& res) {
+            res.set_header("Access-Control-Allow-Origin", "*");
+            res.set_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            res.set_header("Access-Control-Allow-Headers", "Content-Type");
                 std::string logs = getLogs();
                 res.set_content(logs, "text/plain");
         });
