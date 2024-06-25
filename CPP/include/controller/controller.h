@@ -12,6 +12,7 @@
 #include "../switch/switch.h"
 #include "../logger.h"
 #include "../IPAddressManager.h"
+#include "../loadbalancer.h"
 
 using namespace std;
 using namespace std::this_thread;
@@ -41,6 +42,9 @@ class Controller{
         // Create IPAddressMangager instance
         IPAddressManager ipManager;
 
+        // Create Load balance instance
+        LoadBalancer loadBalancer;
+
         // function to log events to the network log
         void logEvent(string event){
             Logger::getInstance().log(event);
@@ -63,6 +67,7 @@ class Controller{
             swt.setIP(ip);
             switches.push_back(swt);
             RoutingTableEntry tmp;
+            loadBalancer.addSwitchToL(swt);
             tmp.destination = ip;
             tmp.nextHop = {};
             tmp.cost = 0;
@@ -81,6 +86,8 @@ class Controller{
                     currentIP = (*it).getIP(); 
                     ipManager.releaseIP(currentIP);
                     switches.erase(it);
+                    loadBalancer.removeSwitchFromL(*it);
+
                     // Find and remove the erased IP from the routing table 
                     for(auto entry = routingTable.begin(); entry!=routingTable.end(); entry++){
                         if ((*entry).destination == currentIP){
@@ -153,6 +160,12 @@ class Controller{
             }
         }
 
+        // Method to update load matrix for a switch
+        void updateSwitchLoad(int load, string swtName){
+            loadBalancer.updateLoad(swtName,load);
+            logEvent("Update load for " + swtName + ": " + to_string(load));
+        }
+        
         // Method to perform routing based on destination IP Address
         string route(string destination){
             for(const auto& entry: routingTable){

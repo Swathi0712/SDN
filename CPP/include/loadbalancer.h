@@ -27,6 +27,25 @@ class LoadBalancer{
         }
 
         // Update load metrics for a switch
+        void updateLoad(string swtName, int load){
+            if (switchLoad.find(swtName)!=switchLoad.end()){
+                switchLoad[swtName]=load;
+            }
+        }
+
+        // Select the best switch based on the least load
+        string selectSwitch(vector<string> nxtHops){
+            string bestSwitch;
+            int minLoad = INT_MAX;
+            for(auto hop:nxtHops){
+                auto it = switchLoad.find(hop);
+                if(it!=switchLoad.end()&&it->second<minLoad){
+                    minLoad = it->second;
+                    bestSwitch = it->first;
+                }
+            }
+            return bestSwitch;
+        }
         
 };
 
